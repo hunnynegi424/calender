@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calender</title>
+</head>
+<body onload="load()">
+    <div id="getmonthnyear">
+        <p id="month"></p>
+        <p id="year" onclick="changeyear()"></p>
+        <a class="prevmonth" onclick="changemonth(-1)">&laquo;</a>
+        <a class="nextmonth" onclick="changemonth(1)">&raquo;</a>
+    </div>
+<hr>
+    <div id="weekdays">
+    <table>
+        <th>
+            <td class="weeks">Sunday</td>
+            <td class="weeks">Monday</td>
+            <td class="weeks">Tuesday</td>
+            <td class="weeks">Wednesday</td>
+            <td class="weeks">Thursday</td>
+            <td class="weeks">Friday</td>
+            <td class="weeks">Saturday</td>
+        </th>
+    </table>
+    </div>
+    <div id="weekdays-mobile">
+        <table>
+            <th>
+                <td class="weeks">S</td>
+                <td class="weeks">M</td>
+                <td class="weeks">T</td>
+                <td class="weeks">W</td>
+                <td class="weeks">T</td>
+                <td class="weeks">F</td>
+                <td class="weeks">S</td>
+            </th>
+        </table>
+        </div>
+    <br>
+    <div id="calender">
+        <table>
+            <tr id="block1">
+            </tr>
+            <tr id="block2">
+            </tr>
+            <tr id="block3">
+            </tr>
+            <tr id="block4">
+            </tr>
+            <tr id="block5">
+            </tr>
+            <tr id="block6">
+            </tr>
+        </table>
+    </div>
+<Style>
+body {
+    background-color: rgb(243, 242, 242);
+    font-family: Helvetica;
+}
+#getmonthnyear {
+    background: #1abc9c;
+    height: 150px;
+    text-align: center;
+    color: white;
+    padding-top: 30px;
+    padding-bottom: 40px;
+}
+#month {
+    font-size: 50px;
+    cursor: pointer;
+}
+#year {
+    margin-top: -30px;
+    font-size: 30px;
+    cursor: pointer;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.weeks {
+    text-align: center;
+    padding: 14px;
+    background-color: #555;
+    color: white;
+}
+#weekdays-mobile {
+    display: none;
+}
+#block1, #block2, #block3, #block4, #block5, #block6 {
+    border: 1px solid #b8b7b7;
+    height: 55px;
+    text-align: center;
+    cursor: pointer;
+}
+.prevmonth, .nextmonth {
+    font-weight: bold;
+    position: absolute;
+    color: white;
+    cursor: pointer;
+}
+.prevmonth {
+    top: 110px;
+    font-size: 30px;
+    left: 20px;
+}
+.nextmonth {
+    top: 110px;
+    font-size: 30px;
+    right: 20px;
+}
+@media only screen and (max-width: 645px){
+    #month {
+        padding-top: 25px;
+        font-size: 30px;
+    }
+    #year {
+        margin-top: -15px;
+        font-size: 20px;
+    }
+    .prevmonth {
+        top: 95px;
+        left: 10px;
+    }
+    .nextmonth {
+        top: 95px;
+        right: 10px;
+    }
+    #weekdays {
+        display: none;
+    }
+    #weekdays-mobile {
+        display: inline;
+    }
+    #calender {
+        display: inline;
+        grid: 1px;
+        width:100%;
+    }
+    #block1, #block2, #block3, #block4, #block5, #block6 {
+        padding-top: 15px;
+        height: 60px;
+        text-align: center;
+        border-collapse: collapse;
+    }
+}
+</Style>  
+
+<script>
+var d = new Date();
+var m = d.getMonth();
+var y = d.getFullYear();
+var date = d.getDate();
+var month = ["January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+document.getElementById("month").innerHTML = month[m];
+document.getElementById("year").innerHTML = y;
+
+function changemonth(x){
+    m += x;
+    if(m>=0 && m<=11){
+    document.getElementById("month").innerHTML = month[m];
+    }else if(m<0){
+            m=11;
+            changeyear(-1);
+            document.getElementById("month").innerHTML = month[m];
+    }
+    else if(m>11){
+            m=0;
+            changeyear(1);
+            document.getElementById("month").innerHTML = month[m];
+    }
+function changeyear(x1){
+    y+=x1;
+    document.getElementById("year").innerHTML = y;
+    }
+    load();
+}
+function load(){
+var nm = m + 1;
+var nd = new Date(y+","+nm+", 1");
+var wd = nd.getDay();
+var a = 7-wd;
+var ht1 = "";
+
+for(var i=wd;i>0;i--){
+    ht1 +="<td></td>"
+}
+var start = "";
+var day = d.getDate();
+
+var feb="";
+if((y%100!=0) && (y%4==0) || (y%400==0)){
+    feb=29;
+}else{
+    feb=28;
+}
+var end = [31,''+feb+'', 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+for(start=1; start<=a; start++){
+    ht1 +="<td class='block' onclick='myfunction(this)'>"+start+"</td>"
+}
+document.getElementById("block1").innerHTML = ht1;
+
+var ht2=""
+for(start=(1+a); start<=(7+a); start++){
+    ht2 +="<td class='block' onclick='myfunction(this)'>"+start+"</td>"
+}
+document.getElementById("block2").innerHTML = ht2;
+
+var ht3=""
+for(start=(8+a); start<=(14+a); start++){
+    ht3 +="<td class='block' onclick='myfunction(this)'>"+start+"</td>"
+}
+document.getElementById("block3").innerHTML = ht3;
+
+var ht4=""
+for(start=(15+a); start<=(21+a); start++){
+    ht4 +="<td class='block' onclick='myfunction(this)'>"+start+"</td>"
+}
+document.getElementById("block4").innerHTML = ht4;
+
+var b = 29+a;
+if(b<=end[m]){
+    var ht5="";
+        for(start=(22+a); start<=(28+a); start++){
+            ht5 +="<td class='block' onclick='myfunction(this)'>"+start+"</td>"
+        }
+                document.getElementById("block5").innerHTML = ht5;
+    var ht6="";
+        for(start=(29+a); start<=end[m]; start++){
+            ht6 +="<td class='block' onclick='myfunction(this)'>"+start+"</td>"
+        }
+                document.getElementById("block6").innerHTML = ht6;
+}
+else{
+    var ht5="";
+    for(start=(22+a); start<=end[m]; start++){
+        ht5 +="<td class='block' onclick='myfunction(this)'>"+start+"</td>"
+    }
+            document.getElementById("block5").innerHTML = ht5;
+    var ht6="";
+    for(start=0; start<=0; start++){
+        ht6 +="<td class='block' onclick='myfunction(this)'> </td>"
+            document.getElementById("block6").innerHTML = ht6;
+    }
+}
+
+}
+function myfunction(fxn){
+    var block = document.getElementsByClassName("block");
+    for(var i=0; i<block.length; i++){
+        block[i].style.backgroundColor="";
+        block[i].style.color="";
+    }
+    fxn.style.backgroundColor='blue';
+    fxn.style.color='white';
+}
+</script>
+</body>
+</html>
